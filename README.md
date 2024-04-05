@@ -1,6 +1,6 @@
 ### Uploading the graph code is in progress.
 ### For special EP data, using the "compute_plane" script to generate.
-### There are 2 benchmarks which are missing. We will find them ASAP.
+### There are 2 benchmarks are missing. We will find them ASAP.
 ### Any problem when use this repo, feel free to ping tjj@swufe.edu.cn or swufe1hh@gmail.com.
 ### Any future work which refer to our method need to add reference as below. It's a mandatory requirement.
 @article{tang2023robust,

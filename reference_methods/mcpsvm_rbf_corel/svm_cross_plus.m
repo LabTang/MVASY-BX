@@ -1,0 +1,83 @@
+function [accuracy24,accuracy25,accuracy26,accuracy27,accuracy28,accuracy29,accuracy210,accuracy211]=svm_cross_plus(data,data2,y,c,g,gamma,folds,Da,Db)
+[M,N]=size(data);
+t4=0;t5=0;t6=0;t7=0;t8=0;t9=0;
+t10=0;t11=0;
+indices=crossvalind('Kfold',data(1:M,N),folds);
+for k=1:folds
+    test = (indices == k);
+    train = ~test;
+    train_data=data(train,:);
+    train_data2=data2(train,:);
+    train_target=y(train,:);
+    test_data=data(test,:);
+    test_data2=data2(test,:);
+    test_target=y(test,:);
+    
+    tic;
+    model=pisvmtrain(train_data,train_data2,train_target,'rbf',c,g,gamma);
+    accuracy4(k)=predict_svmplus(model,test_data,test_target);
+    t4=t4+toc;
+    clear model;
+    tic;
+    model=pisvmtrain(train_data2,train_data,train_target,'rbf',c,g,gamma);
+    accuracy5(k)=predict_svmplus(model,test_data2,test_target);
+    t5=t5+toc;
+    clear model;
+    tic;
+    model=svm2kplus2v_new(train_data,train_data2,train_target,'rbf',c,c,c,g,gamma);
+    accuracy6(k)=predict_svm2kplus2v_new(model,test_data,test_data2,test_target);
+    t6=t6+toc;
+    clear model;
+    tic;
+    model=svm2kplus2v_new(train_data2,train_data,train_target,'rbf',c,c,c,g,gamma);
+    accuracy7(k)=predict_svm2kplus2v_new(model,test_data2,test_data,test_target);
+    t7=t7+toc;
+    clear model;
+    tic;
+    model=psvm2v(train_data,train_data2,train_target,'rbf',c,c,c,g,gamma,Da,Db);
+    accuracy8(k)=predict_psvm2v(model,test_data,test_data2,test_target);
+    t8=t8+toc;
+    clear model;
+    tic;
+    model=psvm2v(train_data2,train_data,train_target,'rbf',c,c,c,g,gamma,Da,Db);
+    accuracy9(k)=predict_psvm2v(model,test_data2,test_data,test_target);
+    t9=t9+toc;
+    clear model;
+    tic;
+    model=rpsvm2v(train_data,train_data2,train_target,'rbf',c,c,c,g,gamma);
+    accuracy10(k)=predict_rpsvm2v(model,test_data,test_data2,test_target);
+    t10=t10+toc;
+    clear model;
+    tic;
+    model=rpsvm2v(train_data2,train_data,train_target,'rbf',c,c,c,g,gamma);
+    accuracy11(k)=predict_rpsvm2v(model,test_data2,test_data,test_target);
+    t11=t11+toc;
+    clear model;
+
+end
+accuracy24.mean=mean(accuracy4);
+accuracy24.std=std(accuracy4,1);
+accuracy25.mean=mean(accuracy5);
+accuracy25.std=std(accuracy5,1);
+accuracy26.mean=mean(accuracy6);
+accuracy26.std=std(accuracy6,1);
+accuracy27.mean=mean(accuracy7);
+accuracy27.std=std(accuracy7,1);
+accuracy28.mean=mean(accuracy8);
+accuracy28.std=std(accuracy8,1);
+accuracy29.mean=mean(accuracy9);
+accuracy29.std=std(accuracy9,1);
+accuracy210.mean=mean(accuracy10);
+accuracy210.std=std(accuracy10,1);
+accuracy211.mean=mean(accuracy11);
+accuracy211.std=std(accuracy11,1);
+
+accuracy24.time=t4/folds;
+accuracy25.time=t5/folds;
+accuracy26.time=t6/folds;
+accuracy27.time=t7/folds;
+accuracy28.time=t8/folds;
+accuracy29.time=t9/folds;
+accuracy210.time=t10/folds;
+accuracy211.time=t11/folds;
+end
